@@ -1,9 +1,17 @@
 const express = require('express');
+const cors = require('cors');
 require('dotenv').config();
 const app = express();
-const PORT = 3000;
+const PORT = 5000;
 const TESTURL = 'http://20.244.56.144/test';
 const token = process.env.AUTH;
+
+app.use(
+    cors({
+      origin: process.env.FRONTEND_URL || "http://localhost:3000",
+      credentials: true,
+    })
+  );
 
 app.get('/users', async (req, res) => {
     try {
