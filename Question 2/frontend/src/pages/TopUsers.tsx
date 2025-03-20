@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Grid, Card, CardContent, Typography, Avatar } from '@mui/material';
+import { fetchTopUsers } from '../services/services';
 
 interface User {
   userId: string;
@@ -10,10 +11,16 @@ const TopUsers: React.FC = () => {
   const [topUsers, setTopUsers] = useState<User[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:5000/users')
-      .then((response) => response.json())
-      .then((data) => setTopUsers(data.topUsers))
-      .catch((error) => console.error('Error fetching top users:', error));
+    const fetchUsers = async () => {
+      try {
+        const data = await fetchTopUsers();
+        setTopUsers(data);
+      } catch (error) {
+        console.error('Error fetching top users:', error);
+      }
+    };
+
+    fetchUsers();
   }, []);
 
   return (

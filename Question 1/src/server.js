@@ -20,7 +20,6 @@ app.get('/users', async (req, res) => {
                 'Authorization': `Bearer ${token}`
             }
         });
-        console.log(usersResponse);
         const users = await usersResponse.json();
         const userList = Object.keys(users.users);
         const postCounts = await Promise.all(userList.map(async userId => {

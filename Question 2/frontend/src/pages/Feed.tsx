@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Grid, Card, CardContent, Typography, Avatar } from '@mui/material';
+import { fetchLatestPosts } from '../services/services';
 
 interface Post {
   id: string;
@@ -10,17 +11,20 @@ const Feed: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
-    const fetchPosts = () => {
-      fetch('http://localhost:5000/posts?type=latest')
-        .then((response) => response.json())
-        .then((data) => setPosts(data.posts))
-        .catch((error) => console.error('Error fetching feed:', error));
+    const fetchPosts = async () => {
+      try {
+        const data = await fetchLatestPosts();
+        setPosts(data);
+      } catch (error) {
+        console.error('Error fetching feed:', error);
+      }
     };
 
     fetchPosts();
-    const interval = setInterval(fetchPosts, 5000); 
+    const interval = setInterval(fetchPosts, 5000);
     return () => clearInterval(interval);
   }, []);
+
 
   return (
     <Container className="py-8">

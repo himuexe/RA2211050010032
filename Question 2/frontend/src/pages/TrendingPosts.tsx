@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Grid, Card, CardContent, Typography, Avatar } from '@mui/material';
+import { fetchTrendingPosts } from '../services/services';
 
 interface Post {
   id: string;
@@ -11,10 +12,16 @@ const TrendingPosts: React.FC = () => {
   const [trendingPosts, setTrendingPosts] = useState<Post[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:5000/posts?type=popular')
-      .then((response) => response.json())
-      .then((data) => setTrendingPosts(data.posts))
-      .catch((error) => console.error('Error fetching trending posts:', error));
+    const fetchPosts = async () => {
+      try {
+        const data = await fetchTrendingPosts();
+        setTrendingPosts(data);
+      } catch (error) {
+        console.error('Error fetching trending posts:', error);
+      }
+    };
+
+    fetchPosts();
   }, []);
 
   return (
